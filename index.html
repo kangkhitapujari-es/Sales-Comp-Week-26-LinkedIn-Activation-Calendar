@@ -3,214 +3,269 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sales Comp Week '26 — LinkedIn Cadence</title>
+<title>Sales Comp Week '26 — LinkedIn Activation Calendar</title>
 <style>
   :root { color-scheme: light; }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-    background: #F7F7F8;
+    background: #F2F3F6;
     color: #111;
-    padding: 28px 24px 48px;
-    min-height: 100vh;
+    padding: 36px 32px 64px;
   }
 
-  /* ── Header ─────────────────────────────────────────────── */
-  .header {
+  /* ── Page Header ─────────────────────────────── */
+  .page-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: #0D0D0D;
+    letter-spacing: -.5px;
+    margin-bottom: 6px;
+  }
+  .page-sub {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 20px;
+  }
+
+  /* Session cards strip */
+  .sessions {
     display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
+    gap: 10px;
     margin-bottom: 24px;
     flex-wrap: wrap;
-    gap: 12px;
   }
-  .header-left h1 {
-    font-size: 18px;
-    font-weight: 800;
-    color: #111;
-    letter-spacing: -.3px;
-  }
-  .header-left p {
-    font-size: 12px;
-    color: #888;
-    margin-top: 4px;
-  }
-  .badges {
+  .sess {
     display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-top: 10px;
-  }
-  .badge {
-    font-size: 10px;
-    font-weight: 700;
-    padding: 3px 9px;
-    border-radius: 20px;
-    color: #fff;
-    letter-spacing: .03em;
-  }
-
-  /* ── Session strip ───────────────────────────────────────── */
-  .sessions {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
     gap: 10px;
-    margin-bottom: 22px;
-  }
-  .sess-card {
+    background: #fff;
+    border: 1px solid #E0E0E0;
     border-radius: 10px;
-    padding: 12px 14px;
-    border-left: 4px solid;
+    padding: 10px 16px;
+    flex: 1;
+    min-width: 240px;
   }
-  .sess-card .s-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; opacity: .7; }
-  .sess-card .s-title { font-size: 13px; font-weight: 700; margin-top: 3px; }
-  .sess-card .s-date  { font-size: 11px; font-weight: 600; margin-top: 3px; opacity: .75; }
+  .sess-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+  .sess-info {}
+  .sess-name { font-size: 13px; font-weight: 700; color: #111; }
+  .sess-date { font-size: 11px; color: #888; margin-top: 2px; }
 
-  .s1 { background: #EEE9FF; border-color: #534AB7; color: #2A2470; }
-  .s2 { background: #E4F5EE; border-color: #0F6E56; color: #0A4035; }
-  .s3 { background: #FFF1E0; border-color: #854F0B; color: #5C3000; }
-
-  /* ── Legend ──────────────────────────────────────────────── */
+  /* ── Legend ──────────────────────────────────── */
   .legend {
     display: flex;
-    gap: 14px;
+    gap: 18px;
     flex-wrap: wrap;
-    margin-bottom: 18px;
     align-items: center;
+    background: #fff;
+    border: 1px solid #E5E5E5;
+    border-radius: 10px;
+    padding: 12px 18px;
+    margin-bottom: 20px;
   }
-  .leg { display: flex; align-items: center; gap: 5px; font-size: 10.5px; color: #555; }
-  .ld  { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+  .leg { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: #333; font-weight: 500; }
+  .ld { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+  .leg-note { font-size: 10.5px; color: #bbb; font-style: italic; margin-left: auto; }
 
-  /* ── Table wrapper ───────────────────────────────────────── */
+  /* ── Table ───────────────────────────────────── */
   .tbl-wrap {
     background: #fff;
-    border-radius: 12px;
-    border: 1px solid #E5E5E5;
+    border-radius: 14px;
+    border: 1px solid #DCDCDE;
     overflow: hidden;
-    box-shadow: 0 1px 6px rgba(0,0,0,.05);
+    box-shadow: 0 2px 16px rgba(0,0,0,.07);
   }
   table { border-collapse: collapse; width: 100%; min-width: 860px; }
 
-  /* header row */
+  /* Column headers */
   th {
-    background: #F0F0F2;
-    padding: 9px 8px;
-    font-size: 9px;
-    font-weight: 700;
-    color: #555;
-    text-transform: uppercase;
-    letter-spacing: .05em;
-    border-right: 1px solid #E5E5E5;
-    border-bottom: 1px solid #E5E5E5;
-    text-align: center;
-    vertical-align: bottom;
-    line-height: 1.35;
-  }
-  th:first-child { text-align: left; padding-left: 14px; min-width: 190px; }
-  th:last-child  { border-right: none; }
-
-  .th-sub  { display: block; font-weight: 400; color: #aaa; font-size: 8px; margin-top: 2px; }
-  .sflag   { display: inline-block; font-size: 8px; font-weight: 700; padding: 2px 6px; border-radius: 4px; color: #fff; margin-top: 4px; }
-
-  /* section rows */
-  tr.sec td {
-    background: #F5F5F7;
-    font-size: 9px; font-weight: 700; color: #555;
-    padding: 5px 14px;
-    letter-spacing: .08em; text-transform: uppercase;
-    border-top: 2px solid #DDDDE0;
+    background: #F8F8FA;
+    padding: 16px 14px 12px;
     text-align: left;
+    vertical-align: bottom;
+    border-right: 1px solid #E4E4E6;
+    border-bottom: 2px solid #DCDCDE;
+  }
+  th:first-child { width: 21%; min-width: 196px; }
+  th:last-child { border-right: none; }
+
+  .th-range {
+    font-size: 17px;
+    font-weight: 800;
+    color: #111;
+    display: block;
+    margin-bottom: 3px;
+  }
+  .th-label {
+    font-size: 10.5px;
+    font-weight: 500;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    display: block;
+  }
+  .th-sess {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 5px;
+    color: #fff;
+    margin-top: 8px;
+    letter-spacing: .02em;
   }
 
-  /* data rows */
+  /* Section header rows */
+  tr.sec td {
+    padding: 11px 16px;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    border-top: 4px solid transparent;
+  }
+  tr.sec-s1 td  { background: #534AB7; border-top-color: #3D35A0; }
+  tr.sec-s2 td  { background: #0F6E56; border-top-color: #0A5040; }
+  tr.sec-s3 td  { background: #854F0B; border-top-color: #6A3E08; }
+  tr.sec-host td { background: #1A1A2E; border-top-color: #111; }
+  tr.sec-exec td { background: #4A0E5C; border-top-color: #360A44; }
+  tr.sec-ae td  { background: #1A3A6A; border-top-color: #102A52; }
+
+  /* Data rows */
   td {
-    padding: 10px 8px;
-    vertical-align: middle;
-    border-right: 1px solid #EEEEF0;
-    border-top: 1px solid #EEEEF0;
-    text-align: center;
+    padding: 14px;
+    vertical-align: top;
+    border-right: 1px solid #EBEBED;
+    border-top: 1px solid #EBEBED;
     background: #fff;
   }
-  td:first-child { text-align: left; padding-left: 14px; background: #FAFAFA !important; }
-  td:last-child  { border-right: none; }
+  td:last-child { border-right: none; }
 
-  .nm   { font-weight: 700; font-size: 12px; color: #111; }
-  .rl   { font-size: 9px; color: #888; margin-top: 2px; line-height: 1.35; }
-  .stag { display: inline-block; font-size: 8px; font-weight: 700; padding: 2px 6px; border-radius: 4px; color: #fff; margin-top: 4px; }
-  .tbc-tag { background: #eee !important; color: #777 !important; border: 1px solid #ccc; }
+  /* Person cell */
+  .pcell { background: #FAFAFA !important; border-right: 2px solid #E4E4E6 !important; }
+  .p-name { font-size: 14px; font-weight: 700; color: #0D0D0D; line-height: 1.3; }
+  .p-role { font-size: 10.5px; color: #555; margin-top: 4px; line-height: 1.45; }
+  .p-company { font-size: 10.5px; font-weight: 600; color: #777; margin-top: 2px; }
+  .p-tag {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2.5px 8px;
+    border-radius: 4px;
+    color: #fff;
+    margin-top: 8px;
+    letter-spacing: .03em;
+  }
 
-  /* pills */
-  .pill { display: inline-block; font-size: 9px; font-weight: 600; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
-  .dt   { font-size: 8.5px; color: #bbb; display: block; margin-top: 3px; }
-  .nt   { font-size: 8px; color: #ccc; display: block; margin-top: 1px; font-style: italic; }
+  /* Empty cell */
+  .ec { text-align: center; vertical-align: middle !important; color: #DADADA; font-size: 22px; }
 
-  .ann  { background: #ECEAFF; color: #3B28C0; }
-  .ban  { background: #E2F8E2; color: #1A5A1A; }
-  .hs   { background: #DAF0FF; color: #0A58A8; }
-  .host { background: #FFF2CC; color: #7A3800; }
-  .exec { background: #FFE3EE; color: #7A0840; }
-  .tbc  { background: #F0F0F0; color: #777; border: 1px dashed #ccc; }
-  .ae   { background: #EDE5FF; color: #4010A0; }
+  /* Post card */
+  .pcard {
+    border-radius: 8px;
+    padding: 11px 13px;
+    border-left: 4px solid #ccc;
+  }
+  .pc-title {
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+  .pc-date {
+    font-size: 11.5px;
+    font-weight: 600;
+    margin-top: 5px;
+  }
+  .pc-note {
+    font-size: 10px;
+    margin-top: 3px;
+    font-style: italic;
+  }
 
-  .empty { color: #E0E0E0; font-size: 18px; }
+  /* Post type variants */
+  .pv-video  { border-color: #534AB7; background: #EFEDFF; }
+  .pv-video  .pc-title { color: #3B2DA8; }
+  .pv-video  .pc-date  { color: #6256CC; }
+  .pv-video  .pc-note  { color: #8E85D4; }
 
-  tbody tr:not(.sec):hover td { background: #F8F8FF !important; }
+  .pv-banner { border-color: #0870C0; background: #EBF4FF; }
+  .pv-banner .pc-title { color: #0660A8; }
+  .pv-banner .pc-date  { color: #3880C0; }
+  .pv-banner .pc-note  { color: #7AAAD0; }
 
-  /* ── Footer ──────────────────────────────────────────────── */
+  .pv-host   { border-color: #C05800; background: #FFF4EA; }
+  .pv-host   .pc-title { color: #A04800; }
+  .pv-host   .pc-date  { color: #C07020; }
+  .pv-host   .pc-note  { color: #C09050; }
+
+  .pv-exec   { border-color: #7A0A50; background: #FFF0F6; }
+  .pv-exec   .pc-title { color: #7A0A50; }
+  .pv-exec   .pc-date  { color: #A03070; }
+  .pv-exec   .pc-note  { color: #C070A0; }
+
+  .pv-tbc    { border-color: #999; background: #F6F6F6; border-style: dashed; }
+  .pv-tbc    .pc-title { color: #555; }
+  .pv-tbc    .pc-date  { color: #888; }
+
+  .pv-ae     { border-color: #5010B0; background: #F5EEFF; }
+  .pv-ae     .pc-title { color: #4010A0; }
+  .pv-ae     .pc-date  { color: #6030C0; }
+
+  tbody tr:not(.sec):hover td            { background: #F7F7FF !important; }
+  tbody tr:not(.sec):hover td.pcell      { background: #F0F0F8 !important; }
+
+  /* Footer */
   .footer {
     margin-top: 16px;
-    font-size: 9.5px;
+    font-size: 10px;
     color: #aaa;
-    line-height: 1.8;
+    line-height: 1.9;
     padding: 0 2px;
   }
-  .updated { font-size: 9px; color: #ccc; margin-top: 6px; }
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-left">
-    <h1>Sales Comp Week '26 — LinkedIn Cadence</h1>
-    <p>Organic LinkedIn posting schedule · Speakers · Host · Executives</p>
-    <div class="badges">
-      <span class="badge" style="background:#534AB7">S1 · Jun 23</span>
-      <span class="badge" style="background:#0F6E56">S2 · Jul 7</span>
-      <span class="badge" style="background:#854F0B">S3 · Jul 9</span>
-      <span class="badge" style="background:#555">19 people · 31 posts</span>
+<h1 class="page-title">Sales Comp Week '26 — LinkedIn Activation Calendar</h1>
+<p class="page-sub">Organic LinkedIn posting schedule &nbsp;·&nbsp; 19 people &nbsp;·&nbsp; All 3 sessions</p>
+
+<!-- Sessions -->
+<div class="sessions">
+  <div class="sess">
+    <div class="sess-dot" style="background:#534AB7"></div>
+    <div class="sess-info">
+      <div class="sess-name">Session 1 — The Mid-Year Comp Reset</div>
+      <div class="sess-date">Tuesday, Jun 23, 2026</div>
     </div>
   </div>
-</div>
-
-<!-- Session strip -->
-<div class="sessions">
-  <div class="sess-card s1">
-    <div class="s-label">Session 1</div>
-    <div class="s-title">The Mid-Year Comp Reset</div>
-    <div class="s-date">Tuesday, Jun 23, 2026</div>
+  <div class="sess">
+    <div class="sess-dot" style="background:#0F6E56"></div>
+    <div class="sess-info">
+      <div class="sess-name">Session 2 — The Comp Infrastructure Gap</div>
+      <div class="sess-date">Tuesday, Jul 7, 2026</div>
+    </div>
   </div>
-  <div class="sess-card s2">
-    <div class="s-label">Session 2</div>
-    <div class="s-title">The Comp Infrastructure Gap</div>
-    <div class="s-date">Tuesday, Jul 7, 2026</div>
-  </div>
-  <div class="sess-card s3">
-    <div class="s-label">Session 3</div>
-    <div class="s-title">The Comp Efficiency Paradox</div>
-    <div class="s-date">Thursday, Jul 9, 2026</div>
+  <div class="sess">
+    <div class="sess-dot" style="background:#854F0B"></div>
+    <div class="sess-info">
+      <div class="sess-name">Session 3 — The Comp Efficiency Paradox</div>
+      <div class="sess-date">Thursday, Jul 9, 2026</div>
+    </div>
   </div>
 </div>
 
 <!-- Legend -->
 <div class="legend">
-  <div class="leg"><div class="ld" style="background:#5030D0"></div>Sess. Level + Banner (Spkr 1 &amp; 2)</div>
-  <div class="leg"><div class="ld" style="background:#1A8020"></div>Session Banner (Spkr 3–6)</div>
-  <div class="leg"><div class="ld" style="background:#0870C0"></div>Headshot Post</div>
-  <div class="leg"><div class="ld" style="background:#D06000"></div>Host Post · Jose</div>
-  <div class="leg"><div class="ld" style="background:#C01050"></div>Exec Post</div>
-  <div class="leg"><div class="ld" style="background:#5C10C0"></div>AE Post</div>
-  <div class="leg" style="font-size:10px;color:#bbb;font-style:italic">Dates = suggested within bucket</div>
+  <div class="leg"><div class="ld" style="background:#534AB7"></div>Sales Comp Week '26 Video</div>
+  <div class="leg"><div class="ld" style="background:#0870C0"></div>Session Level Banner / Headshots</div>
+  <div class="leg"><div class="ld" style="background:#C05800"></div>Host Post · Jose</div>
+  <div class="leg"><div class="ld" style="background:#7A0A50"></div>Exec Post</div>
+  <div class="leg"><div class="ld" style="background:#5010B0"></div>AE Post</div>
+  <div class="leg-note">Dates suggested within each window &nbsp;·&nbsp; Siva = TBC &nbsp;·&nbsp; Jul 4 avoided</div>
 </div>
 
 <!-- Table -->
@@ -218,243 +273,296 @@
 <table>
 <thead>
   <tr>
-    <th>Person</th>
-    <th>Jun 1–14<span class="th-sub">Session Level + Banner</span></th>
     <th>
-      Jun 15–22
-      <span class="th-sub">Pre-S1 Zone</span>
-      <div><span class="sflag" style="background:#534AB7">S1 ↓ Tue Jun 23</span></div>
-    </th>
-    <th>Jun 24–28<span class="th-sub">Post-S1</span></th>
-    <th>
-      Jun 29–Jul 5
-      <span class="th-sub">Pre-S2 Zone</span>
-      <div><span class="sflag" style="background:#0F6E56">S2 ↓ Tue Jul 7</span></div>
+      <span class="th-range">Person</span>
+      <span class="th-label">Role · Company</span>
     </th>
     <th>
-      Jul 7–9
-      <span class="th-sub">S2 + S3 Zone</span>
-      <div><span class="sflag" style="background:#854F0B">S3 ↓ Thu Jul 9</span></div>
+      <span class="th-range">Jun 15–21</span>
+      <span class="th-label">Pre–Session 1 Window</span>
+      <div><span class="th-sess" style="background:#534AB7">↓ Session 1 · Tue Jun 23</span></div>
+    </th>
+    <th>
+      <span class="th-range">Jun 24–28</span>
+      <span class="th-label">Post–Session 1</span>
+    </th>
+    <th>
+      <span class="th-range">Jun 29 – Jul 5</span>
+      <span class="th-label">Pre–Session 2 Window</span>
+      <div><span class="th-sess" style="background:#0F6E56">↓ Session 2 · Tue Jul 7</span></div>
+    </th>
+    <th>
+      <span class="th-range">Jul 7–9</span>
+      <span class="th-label">Session 2 + 3 Zone</span>
+      <div><span class="th-sess" style="background:#854F0B">↓ Session 3 · Thu Jul 9</span></div>
     </th>
   </tr>
 </thead>
 <tbody>
 
-  <!-- S1 SPEAKERS -->
-  <tr class="sec"><td colspan="6">🎙 Speakers · Session 1 — The Mid-Year Comp Reset · Tue Jun 23</td></tr>
+  <!-- ── S1 SPEAKERS ── -->
+  <tr class="sec sec-s1"><td colspan="5">🎙&nbsp; Session 1 Speakers — The Mid-Year Comp Reset &nbsp;·&nbsp; Tue Jun 23</td></tr>
 
   <tr>
-    <td>
-      <div class="nm">Dillon Anderson</div>
-      <div class="rl">Sr Dir, Sales Comp &amp; Planning Strategy<br>Wolters Kluwer</div>
-      <span class="stag" style="background:#534AB7">Speaker 1 · S1</span>
+    <td class="pcell">
+      <div class="p-name">Dillon Anderson</div>
+      <div class="p-role">Sr Director, Sales Compensation<br>and Planning Strategy</div>
+      <div class="p-company">Wolters Kluwer</div>
+      <span class="p-tag" style="background:#534AB7">Speaker 1 · S1</span>
     </td>
-    <td><span class="pill ann">Sess. Level + Banner</span><span class="dt">Jun 3 · Wed</span></td>
-    <td><span class="pill hs">Headshot</span><span class="dt">Jun 17 · Tue</span><span class="nt">Week before S1</span></td>
-    <td><span class="empty">—</span></td>
-    <td><span class="empty">—</span></td>
-    <td><span class="empty">—</span></td>
-  </tr>
-
-  <tr>
     <td>
-      <div class="nm">Matthew Flotard</div>
-      <div class="rl">VP RevOps<br>Gong</div>
-      <span class="stag" style="background:#534AB7">Speaker 2 · S1</span>
+      <div class="pcard pv-video">
+        <div class="pc-title">Sales Comp Week '26 Video</div>
+        <div class="pc-date">Jun 17 · Wed</div>
+      </div>
     </td>
-    <td><span class="pill ann">Sess. Level + Banner</span><span class="dt">Jun 10 · Wed</span></td>
-    <td><span class="pill hs">Headshot</span><span class="dt">Jun 19 · Fri</span><span class="nt">Week before S1</span></td>
-    <td><span class="empty">—</span></td>
-    <td><span class="empty">—</span></td>
-    <td><span class="empty">—</span></td>
+    <td class="ec">—</td><td class="ec">—</td><td class="ec">—</td>
   </tr>
 
-  <!-- S2 SPEAKERS -->
-  <tr class="sec"><td colspan="6">🎙 Speakers · Session 2 — The Comp Infrastructure Gap · Tue Jul 7</td></tr>
-
   <tr>
+    <td class="pcell">
+      <div class="p-name">Matthew Flotard</div>
+      <div class="p-role">VP RevOps</div>
+      <div class="p-company">Gong</div>
+      <span class="p-tag" style="background:#534AB7">Speaker 2 · S1</span>
+    </td>
     <td>
-      <div class="nm">Juan Felipe Mejia</div>
-      <div class="rl">Sr Dir, Global Sales Comp Strategy &amp; Ops<br>UiPath</div>
-      <span class="stag" style="background:#0F6E56">Speaker 3 · S2</span>
+      <div class="pcard pv-video">
+        <div class="pc-title">Sales Comp Week '26 Video</div>
+        <div class="pc-date">Jun 19 · Fri</div>
+      </div>
     </td>
-    <td><span class="empty">—</span></td>
-    <td><span class="pill ban">Session Banner</span><span class="dt">Jun 16 · Tue</span><span class="nt">Jun 15 week</span></td>
-    <td><span class="empty">—</span></td>
-    <td><span class="pill hs">Headshot</span><span class="dt">Jul 1 · Wed</span><span class="nt">Jun 29 week</span></td>
-    <td><span class="empty">—</span></td>
+    <td class="ec">—</td><td class="ec">—</td><td class="ec">—</td>
   </tr>
 
+  <!-- ── S2 SPEAKERS ── -->
+  <tr class="sec sec-s2"><td colspan="5">🎙&nbsp; Session 2 Speakers — The Comp Infrastructure Gap &nbsp;·&nbsp; Tue Jul 7</td></tr>
+
   <tr>
+    <td class="pcell">
+      <div class="p-name">Juan Felipe Mejia</div>
+      <div class="p-role">Senior Director, Global Sales<br>Compensation Strategy &amp; Operations</div>
+      <div class="p-company">UiPath</div>
+      <span class="p-tag" style="background:#0F6E56">Speaker 3 · S2</span>
+    </td>
     <td>
-      <div class="nm">Trenli Crest</div>
-      <div class="rl">Sales Ops Sr Dir, Comp Design<br>Avaya</div>
-      <span class="stag" style="background:#0F6E56">Speaker 4 · S2</span>
+      <div class="pcard pv-video">
+        <div class="pc-title">Sales Comp Week '26 Video</div>
+        <div class="pc-date">Jun 16 · Tue</div>
+      </div>
     </td>
-    <td><span class="empty">—</span></td>
-    <td><span class="pill ban">Session Banner</span><span class="dt">Jun 17 · Wed</span><span class="nt">Jun 15 week</span></td>
-    <td><span class="empty">—</span></td>
-    <td><span class="pill hs">Headshot</span><span class="dt">Jul 2 · Thu</span><span class="nt">Jun 29 week</span></td>
-    <td><span class="empty">—</span></td>
-  </tr>
-
-  <!-- S3 SPEAKERS -->
-  <tr class="sec"><td colspan="6">🎙 Speakers · Session 3 — The Comp Efficiency Paradox · Thu Jul 9</td></tr>
-
-  <tr>
+    <td class="ec">—</td>
     <td>
-      <div class="nm">Nate Eisinger</div>
-      <div class="rl">VP, Sales Compensation<br>ConstructConnect</div>
-      <span class="stag" style="background:#854F0B">Speaker 5 · S3</span>
+      <div class="pcard pv-banner">
+        <div class="pc-title">Session Level Banner / Headshots</div>
+        <div class="pc-date">Jul 1 · Wed</div>
+      </div>
     </td>
-    <td><span class="empty">—</span></td>
-    <td><span class="pill ban">Session Banner</span><span class="dt">Jun 18 · Thu</span><span class="nt">Jun 15 week</span></td>
-    <td><span class="empty">—</span></td>
-    <td><span class="pill hs">Headshot</span><span class="dt">Jun 30 · Mon</span><span class="nt">Jun 29 week</span></td>
-    <td><span class="empty">—</span></td>
+    <td class="ec">—</td>
   </tr>
 
   <tr>
+    <td class="pcell">
+      <div class="p-name">Trenli Crest</div>
+      <div class="p-role">Sales Operations Sr Director<br>Compensation Design</div>
+      <div class="p-company">Avaya</div>
+      <span class="p-tag" style="background:#0F6E56">Speaker 4 · S2</span>
+    </td>
     <td>
-      <div class="nm">Julien Spalanzani</div>
-      <div class="rl">Head of GTM Finance · Stripe <span style="color:#ccc;font-style:italic">*(pending)</span></div>
-      <span class="stag" style="background:#854F0B">Speaker 6 · S3</span>
+      <div class="pcard pv-video">
+        <div class="pc-title">Sales Comp Week '26 Video</div>
+        <div class="pc-date">Jun 18 · Thu</div>
+      </div>
     </td>
-    <td><span class="empty">—</span></td>
-    <td><span class="pill ban">Session Banner</span><span class="dt">Jun 19 · Fri</span><span class="nt">Jun 15 week</span></td>
-    <td><span class="empty">—</span></td>
-    <td><span class="pill hs">Headshot</span><span class="dt">Jul 3 · Fri</span><span class="nt">Jun 29 week</span></td>
-    <td><span class="empty">—</span></td>
-  </tr>
-
-  <!-- JOSE -->
-  <tr class="sec"><td colspan="6">🎤 Everstage Host — All 3 Sessions</td></tr>
-
-  <tr>
+    <td class="ec">—</td>
     <td>
-      <div class="nm">Jose Aleman</div>
-      <div class="rl">VP of GTM Excellence · Everstage</div>
-      <span class="stag" style="background:#1a1a1a">Host · S1 + S2 + S3</span>
+      <div class="pcard pv-banner">
+        <div class="pc-title">Session Level Banner / Headshots</div>
+        <div class="pc-date">Jul 2 · Thu</div>
+      </div>
     </td>
-    <td><span class="empty">—</span></td>
-    <td><span class="pill host">Post 1 · Summit Banner</span><span class="dt">Jun 16 · Tue</span><span class="nt">Before S1</span></td>
-    <td><span class="empty">—</span></td>
-    <td><span class="pill host">Post 2 · Headshot</span><span class="dt">Jul 2 · Thu</span><span class="nt">Before S2</span></td>
-    <td><span class="pill host">Post 3 · Headshot</span><span class="dt">Jul 8 · Wed</span><span class="nt">Between S2 → S3</span></td>
+    <td class="ec">—</td>
   </tr>
 
-  <!-- EXECUTIVES -->
-  <tr class="sec"><td colspan="6">👔 Executives</td></tr>
+  <!-- ── S3 SPEAKERS ── -->
+  <tr class="sec sec-s3"><td colspan="5">🎙&nbsp; Session 3 Speakers — The Comp Efficiency Paradox &nbsp;·&nbsp; Thu Jul 9</td></tr>
 
   <tr>
+    <td class="pcell">
+      <div class="p-name">Nate Eisinger</div>
+      <div class="p-role">VP, Sales Compensation</div>
+      <div class="p-company">ConstructConnect</div>
+      <span class="p-tag" style="background:#854F0B">Speaker 5 · S3</span>
+    </td>
     <td>
-      <div class="nm">Siva</div>
-      <div class="rl">CEO · Everstage</div>
-      <span class="stag tbc-tag">TBC</span>
+      <div class="pcard pv-video">
+        <div class="pc-title">Sales Comp Week '26 Video</div>
+        <div class="pc-date">Jun 15 · Mon</div>
+      </div>
     </td>
-    <td><span class="empty">—</span></td>
-    <td><span class="pill tbc">Post 1 · TBC</span><span class="dt">Jun 18 · Thu</span><span class="nt">Week of Jun 15</span></td>
-    <td><span class="pill exec">Post 2</span><span class="dt">Jun 25 · Wed</span><span class="nt">Post-S1</span></td>
-    <td><span class="empty">—</span></td>
-    <td><span class="empty">—</span></td>
-  </tr>
-
-  <tr>
+    <td class="ec">—</td>
     <td>
-      <div class="nm">Mike</div>
-      <div class="rl">SVP, Global Sales · Everstage</div>
-      <span class="stag" style="background:#333">Exec</span>
+      <div class="pcard pv-banner">
+        <div class="pc-title">Session Level Banner / Headshots</div>
+        <div class="pc-date">Jun 30 · Tue</div>
+      </div>
     </td>
-    <td><span class="empty">—</span></td>
-    <td><span class="pill exec">Post 1</span><span class="dt">Jun 17 · Wed</span><span class="nt">Week of Jun 15</span></td>
-    <td><span class="pill exec">Post 2</span><span class="dt">Jun 24 · Tue</span><span class="nt">Day after S1</span></td>
-    <td><span class="empty">—</span></td>
-    <td><span class="empty">—</span></td>
+    <td class="ec">—</td>
   </tr>
 
   <tr>
+    <td class="pcell">
+      <div class="p-name">John Queally</div>
+      <div class="p-role">VP Revenue Strategy &amp; Operations</div>
+      <div class="p-company">6sense</div>
+      <span class="p-tag" style="background:#854F0B">Speaker 6 · S3</span>
+    </td>
     <td>
-      <div class="nm">Kelly</div>
-      <div class="rl">VP, Customer Success · Everstage</div>
-      <span class="stag" style="background:#333">Exec</span>
+      <div class="pcard pv-video">
+        <div class="pc-title">Sales Comp Week '26 Video</div>
+        <div class="pc-date">Jun 16 · Tue</div>
+      </div>
     </td>
-    <td><span class="empty">—</span></td>
-    <td><span class="pill exec">Post 1</span><span class="dt">Jun 19 · Fri</span><span class="nt">Week of Jun 15</span></td>
-    <td><span class="pill exec">Post 2</span><span class="dt">Jun 26 · Thu</span><span class="nt">Post-S1</span></td>
-    <td><span class="empty">—</span></td>
-    <td><span class="empty">—</span></td>
+    <td class="ec">—</td>
+    <td>
+      <div class="pcard pv-banner">
+        <div class="pc-title">Session Level Banner / Headshots</div>
+        <div class="pc-date">Jul 3 · Fri</div>
+      </div>
+    </td>
+    <td class="ec">—</td>
   </tr>
 
+  <!-- ── JOSE ── -->
+  <tr class="sec sec-host"><td colspan="5">🎤&nbsp; Everstage Host — All 3 Sessions</td></tr>
 
-  <!-- AEs -->
-  <tr class="sec"><td colspan="6">📣 9 ABM AEs — Generic Cadence · Week before S1 (Jun 15–19)</td></tr>
+  <tr>
+    <td class="pcell">
+      <div class="p-name">Jose Aleman</div>
+      <div class="p-role">VP of GTM Excellence</div>
+      <div class="p-company">Everstage</div>
+      <span class="p-tag" style="background:#1A1A2E">Host · S1 + S2 + S3</span>
+    </td>
+    <td>
+      <div class="pcard pv-video">
+        <div class="pc-title">Sales Comp Week '26 Video</div>
+        <div class="pc-date">Jun 16 · Tue</div>
+        <div class="pc-note">Summit promo · Before S1</div>
+      </div>
+    </td>
+    <td class="ec">—</td>
+    <td>
+      <div class="pcard pv-host">
+        <div class="pc-title">Summit Banner / Headshots</div>
+        <div class="pc-date">Jul 2 · Thu</div>
+        <div class="pc-note">Before Session 2</div>
+      </div>
+    </td>
+    <td>
+      <div class="pcard pv-host">
+        <div class="pc-title">Summit Banner / Headshots</div>
+        <div class="pc-date">Jul 8 · Wed</div>
+        <div class="pc-note">Between S2 → S3</div>
+      </div>
+    </td>
+  </tr>
+
+  <!-- ── EXECUTIVES ── -->
+  <tr class="sec sec-exec"><td colspan="5">👔&nbsp; Executives</td></tr>
 
   <tr>
-    <td><div class="nm">AE 1</div><div class="rl">ABM AE · Everstage</div></td>
-    <td><span class="empty">—</span></td>
-    <td><span class="pill ae">Post</span><span class="dt">Jun 15 · Mon</span></td>
-    <td><span class="empty">—</span></td><td><span class="empty">—</span></td><td><span class="empty">—</span></td>
+    <td class="pcell">
+      <div class="p-name">Siva</div>
+      <div class="p-role">CEO</div>
+      <div class="p-company">Everstage</div>
+      <span class="p-tag" style="background:#999">TBC</span>
+    </td>
+    <td>
+      <div class="pcard pv-tbc">
+        <div class="pc-title">Sales Comp Week '26 Video · TBC</div>
+        <div class="pc-date">Jun 18 · Thu</div>
+      </div>
+    </td>
+    <td>
+      <div class="pcard pv-exec">
+        <div class="pc-title">Summit Banner Posts</div>
+        <div class="pc-date">Jun 25 · Wed</div>
+        <div class="pc-note">Post–S1</div>
+      </div>
+    </td>
+    <td class="ec">—</td><td class="ec">—</td>
   </tr>
+
   <tr>
-    <td><div class="nm">AE 2</div><div class="rl">ABM AE · Everstage</div></td>
-    <td><span class="empty">—</span></td>
-    <td><span class="pill ae">Post</span><span class="dt">Jun 16 · Tue</span></td>
-    <td><span class="empty">—</span></td><td><span class="empty">—</span></td><td><span class="empty">—</span></td>
+    <td class="pcell">
+      <div class="p-name">Mike</div>
+      <div class="p-role">SVP, Global Sales</div>
+      <div class="p-company">Everstage</div>
+      <span class="p-tag" style="background:#333">Exec</span>
+    </td>
+    <td>
+      <div class="pcard pv-video">
+        <div class="pc-title">Sales Comp Week '26 Video</div>
+        <div class="pc-date">Jun 17 · Wed</div>
+      </div>
+    </td>
+    <td>
+      <div class="pcard pv-exec">
+        <div class="pc-title">Summit Banner Posts</div>
+        <div class="pc-date">Jun 24 · Wed</div>
+        <div class="pc-note">Day after S1</div>
+      </div>
+    </td>
+    <td class="ec">—</td><td class="ec">—</td>
   </tr>
+
   <tr>
-    <td><div class="nm">AE 3</div><div class="rl">ABM AE · Everstage</div></td>
-    <td><span class="empty">—</span></td>
-    <td><span class="pill ae">Post</span><span class="dt">Jun 16 · Tue</span></td>
-    <td><span class="empty">—</span></td><td><span class="empty">—</span></td><td><span class="empty">—</span></td>
+    <td class="pcell">
+      <div class="p-name">Kelly</div>
+      <div class="p-role">VP, Customer Success</div>
+      <div class="p-company">Everstage</div>
+      <span class="p-tag" style="background:#333">Exec</span>
+    </td>
+    <td>
+      <div class="pcard pv-video">
+        <div class="pc-title">Sales Comp Week '26 Video</div>
+        <div class="pc-date">Jun 19 · Fri</div>
+      </div>
+    </td>
+    <td>
+      <div class="pcard pv-exec">
+        <div class="pc-title">Summit Banner Posts</div>
+        <div class="pc-date">Jun 26 · Thu</div>
+        <div class="pc-note">Post–S1</div>
+      </div>
+    </td>
+    <td class="ec">—</td><td class="ec">—</td>
   </tr>
-  <tr>
-    <td><div class="nm">AE 4</div><div class="rl">ABM AE · Everstage</div></td>
-    <td><span class="empty">—</span></td>
-    <td><span class="pill ae">Post</span><span class="dt">Jun 17 · Wed</span></td>
-    <td><span class="empty">—</span></td><td><span class="empty">—</span></td><td><span class="empty">—</span></td>
-  </tr>
-  <tr>
-    <td><div class="nm">AE 5</div><div class="rl">ABM AE · Everstage</div></td>
-    <td><span class="empty">—</span></td>
-    <td><span class="pill ae">Post</span><span class="dt">Jun 17 · Wed</span></td>
-    <td><span class="empty">—</span></td><td><span class="empty">—</span></td><td><span class="empty">—</span></td>
-  </tr>
-  <tr>
-    <td><div class="nm">AE 6</div><div class="rl">ABM AE · Everstage</div></td>
-    <td><span class="empty">—</span></td>
-    <td><span class="pill ae">Post</span><span class="dt">Jun 18 · Thu</span></td>
-    <td><span class="empty">—</span></td><td><span class="empty">—</span></td><td><span class="empty">—</span></td>
-  </tr>
-  <tr>
-    <td><div class="nm">AE 7</div><div class="rl">ABM AE · Everstage</div></td>
-    <td><span class="empty">—</span></td>
-    <td><span class="pill ae">Post</span><span class="dt">Jun 18 · Thu</span></td>
-    <td><span class="empty">—</span></td><td><span class="empty">—</span></td><td><span class="empty">—</span></td>
-  </tr>
-  <tr>
-    <td><div class="nm">AE 8</div><div class="rl">ABM AE · Everstage</div></td>
-    <td><span class="empty">—</span></td>
-    <td><span class="pill ae">Post</span><span class="dt">Jun 19 · Fri</span></td>
-    <td><span class="empty">—</span></td><td><span class="empty">—</span></td><td><span class="empty">—</span></td>
-  </tr>
-  <tr>
-    <td><div class="nm">AE 9</div><div class="rl">ABM AE · Everstage</div></td>
-    <td><span class="empty">—</span></td>
-    <td><span class="pill ae">Post</span><span class="dt">Jun 19 · Fri</span></td>
-    <td><span class="empty">—</span></td><td><span class="empty">—</span></td><td><span class="empty">—</span></td>
-  </tr>
+
+  <!-- ── AEs ── -->
+  <tr class="sec sec-ae"><td colspan="5">📣&nbsp; 9 ABM AEs — Week Before Session 1 (Jun 15–19)</td></tr>
+
+  <tr><td class="pcell"><div class="p-name">AE 1</div><div class="p-role">ABM AE · Everstage</div></td><td><div class="pcard pv-ae"><div class="pc-title">AE Post</div><div class="pc-date">Jun 15 · Mon</div></div></td><td class="ec">—</td><td class="ec">—</td><td class="ec">—</td></tr>
+  <tr><td class="pcell"><div class="p-name">AE 2</div><div class="p-role">ABM AE · Everstage</div></td><td><div class="pcard pv-ae"><div class="pc-title">AE Post</div><div class="pc-date">Jun 16 · Tue</div></div></td><td class="ec">—</td><td class="ec">—</td><td class="ec">—</td></tr>
+  <tr><td class="pcell"><div class="p-name">AE 3</div><div class="p-role">ABM AE · Everstage</div></td><td><div class="pcard pv-ae"><div class="pc-title">AE Post</div><div class="pc-date">Jun 16 · Tue</div></div></td><td class="ec">—</td><td class="ec">—</td><td class="ec">—</td></tr>
+  <tr><td class="pcell"><div class="p-name">AE 4</div><div class="p-role">ABM AE · Everstage</div></td><td><div class="pcard pv-ae"><div class="pc-title">AE Post</div><div class="pc-date">Jun 17 · Wed</div></div></td><td class="ec">—</td><td class="ec">—</td><td class="ec">—</td></tr>
+  <tr><td class="pcell"><div class="p-name">AE 5</div><div class="p-role">ABM AE · Everstage</div></td><td><div class="pcard pv-ae"><div class="pc-title">AE Post</div><div class="pc-date">Jun 17 · Wed</div></div></td><td class="ec">—</td><td class="ec">—</td><td class="ec">—</td></tr>
+  <tr><td class="pcell"><div class="p-name">AE 6</div><div class="p-role">ABM AE · Everstage</div></td><td><div class="pcard pv-ae"><div class="pc-title">AE Post</div><div class="pc-date">Jun 18 · Thu</div></div></td><td class="ec">—</td><td class="ec">—</td><td class="ec">—</td></tr>
+  <tr><td class="pcell"><div class="p-name">AE 7</div><div class="p-role">ABM AE · Everstage</div></td><td><div class="pcard pv-ae"><div class="pc-title">AE Post</div><div class="pc-date">Jun 18 · Thu</div></div></td><td class="ec">—</td><td class="ec">—</td><td class="ec">—</td></tr>
+  <tr><td class="pcell"><div class="p-name">AE 8</div><div class="p-role">ABM AE · Everstage</div></td><td><div class="pcard pv-ae"><div class="pc-title">AE Post</div><div class="pc-date">Jun 19 · Fri</div></div></td><td class="ec">—</td><td class="ec">—</td><td class="ec">—</td></tr>
+  <tr><td class="pcell"><div class="p-name">AE 9</div><div class="p-role">ABM AE · Everstage</div></td><td><div class="pcard pv-ae"><div class="pc-title">AE Post</div><div class="pc-date">Jun 19 · Fri</div></div></td><td class="ec">—</td><td class="ec">—</td><td class="ec">—</td></tr>
 
 </tbody>
 </table>
 </div>
 
 <div class="footer">
-  Julien Spalanzani (Stripe) = confirmation pending &nbsp;·&nbsp;
+  Speaker 6 updated: John Queally, VP Revenue Strategy &amp; Operations · 6sense &nbsp;·&nbsp;
   Siva's slot = TBC throughout &nbsp;·&nbsp;
   Jul 4 avoided (US Independence Day) &nbsp;·&nbsp;
-  Dates are suggested within each bucket — adjust as needed
+  Dates suggested within each window — adjust as needed
+  <br>Generated by Everstage Marketing · Sales Comp Week '26
 </div>
-<div class="updated">Generated by Everstage Marketing · Sales Comp Week 2026</div>
 
 </body>
 </html>
